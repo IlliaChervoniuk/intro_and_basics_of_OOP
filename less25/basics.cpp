@@ -1,8 +1,16 @@
 #include "basics.h"
 #include <iostream>
+#include "Shop/Laptop.h"
 
 void basics() {
     std::cout << "OOP Basics" << std::endl;
+    Laptop* acer = new Laptop();
+    acer->setName("Acer Nitro");
+    acer->setPrice(60499);
+    acer->setPower(90);
+    acer->setHardware("Intel core 5, RAM 16GB, SSD 512GB");
+    std::cout << acer->toString() << std::endl;
+
 }
 
 /* Основні принципи ООП.
