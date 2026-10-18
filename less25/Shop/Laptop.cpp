@@ -5,11 +5,12 @@ std::string Laptop::getHardware() const {
     return hardware;
 }
 
-void Laptop::setHardware(std::string hardware) {
+Laptop* Laptop::setHardware(std::string hardware) {
     this->hardware = hardware;
+    return this;    // Fluent interface
 }
 
-std::string Laptop::toString() const {
+std::string Laptop::toString() const  {
     return std::format("{} {} hrn, {} ({} W)",
         getName(),
         getPrice(),
