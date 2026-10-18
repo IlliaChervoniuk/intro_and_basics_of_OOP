@@ -10,10 +10,10 @@ void Laptop::setHardware(std::string hardware) {
 }
 
 std::string Laptop::toString() const {
-    return std::format("{} {} hrn, {} ({}W)",
+    return std::format("{} {} hrn, {} ({} W)",
         getName(),
         getPrice(),
-        getHardware(),
+        hardware,
         getPower()
-        );
+    );
 }

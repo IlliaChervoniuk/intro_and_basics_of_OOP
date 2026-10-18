@@ -11,6 +11,7 @@ void basics() {
     acer->setHardware("Intel core 5, RAM 16GB, SSD 512GB");
     std::cout << acer->toString() << std::endl;
 
+
 }
 
 /* Основні принципи ООП.

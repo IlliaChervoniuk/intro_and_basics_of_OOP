@@ -1,7 +1,7 @@
-#include "Product.h"
 #include <string>
+#include "Product.h"
 
-std::string Product::getName() {
+std::string Product::getName() const {
     return name;
 }
 
@@ -9,7 +9,7 @@ void Product::setName(std::string name) {
     this->name = name;
 }
 
-double Product::getPrice() {
+double Product::getPrice() const {
     return price;
 }
 
