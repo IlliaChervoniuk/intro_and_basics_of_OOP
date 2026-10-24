@@ -16,5 +16,4 @@ public:
     double      getPrice() const;
     Product*    setPrice(double);
     virtual std::string toString() const = 0;
-
 };
