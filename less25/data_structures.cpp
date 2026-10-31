@@ -3,57 +3,75 @@
 #include <iostream>
 
 template<typename T> // Шаблонними можуть бути функції та типи (класи, структу
-void print(T arg) {  // Шаблон вводить "змінну" для типу, традиційно "Т"
-  std::cout << arg // В самій функції (чи типі) ця "Т" вживається там,
+void print(T arg) {
+    // Шаблон вводить "змінну" для типу, традиційно "Т"
+    std::cout << arg // В самій функції (чи типі) ця "Т" вживається там,
             << std::endl; // де пізніше має бути реальний тип даних
-}                    // Далі компілятор шукає усі вжитки даного шаблону ...
+} // Далі компілятор шукає усі вжитки даного шаблону ...
 
 template<typename T> // Перед кожним оголошенням повторюється template
-struct fraction {    // Для типів (наприклад, структур) шаблон "T"
-  T numerator;     // може вживатись для оголошення полів
-  T denominator;
-  void print() {
-    std::cout
-    << numerator
-    << '/'
-    <<denominator;
-  }
-  T get_numerator() {
-    return numerator;
-  }
-  void set_numerator(T n) {
-   numerator= n;
-  }
+struct fraction {
+    // Для типів (наприклад, структур) шаблон "T"
+    T numerator; // може вживатись для оголошення полів
+    T denominator;
+
+    void print() {
+        std::cout
+                << numerator
+                << '/'
+                << denominator;
+    }
+
+    T get_numerator() {
+        return numerator;
+    }
+
+    void set_numerator(T n) {
+        numerator = n;
+    }
 };
 
 void data_structures() {
-  std::cout << "Data structures" << std::endl;
-  LinkedList<int>* intList = new LinkedList<int>();
-  intList->add(10);
-  intList->add(20);
-  intList->add(30);
-  intList->print();
-  intList->insertBefore(5, 0);
-  intList->print();
-  intList->insertBefore(15, 2);
-  intList->print();
+    std::cout << "Data structures" << std::endl;
+    LinkedList<int> *intList = new LinkedList<int>();
+    intList->add(10);
+    intList->add(20);
+    intList->add(30);
+    intList->print();
+    intList->insertBefore(5, 0);
+    intList->print();
+    intList->insertBefore(15, 2);
+    intList->print();
+    std::cout << "removed: " << intList->remove(0) << std::endl;
+    intList->print();
+    std::cout << "removed: " << intList->remove(3) << std::endl;
+    intList->print();
+    std::cout << "removed: " << intList->remove(0) << std::endl;
+    intList->print();
+    std::cout << "removed: " << intList->remove(0) << std::endl;
+    intList->print();
+    std::cout << "removed: " << intList->remove(0) << std::endl;
+    intList->print();
 }
 
 void data_structures_t() {
-  std::cout << "Data structures and templates" << std::endl;
-  print("Template function demo");        // ... і для кожного конкретного вжитку
-  print(42);                       // створює копію шаблона під даний "T"
-  print(true);                            // Тобто у підсумку буде кілька (5) різні
-  print('A');                             // функції під кожен тип окремо
-  print<short>(42);                       // прямо вказати тип додаємо <тип>
+    std::cout << "Data structures and templates" << std::endl;
+    print("Template function demo"); // ... і для кожного конкретного вжитку
+    print(42); // створює копію шаблона під даний "T"
+    print(true); // Тобто у підсумку буде кілька (5) різні
+    print('A'); // функції під кожен тип окремо
+    print<short>(42); // прямо вказати тип додаємо <тип>
 
 
-  fraction<int> f1{ 1, 2 };    // Для різних конкретних типів також
-  fraction<float> f2{ 1.5, 2.5 }; // буде створено різні структури за
-  fraction<short> f3{ 2, 3 };   // єдиним шаблоном
-  f1.print();  std::cout << std::endl;
-  f2.print();  std::cout << std::endl;
-  f3.print();  std::cout << std::endl;
+    fraction<int> f1{1, 2}; // Для різних конкретних типів також
+    fraction<float> f2{1.5, 2.5}; // буде створено різні структури за
+    fraction<short> f3{2, 3}; // єдиним шаблоном
+    f1.print();
+    std::cout << std::endl;
+    f2.print();
+    std::cout << std::endl;
+    f3.print();
+    std::cout << std::endl;
 }
 
 
