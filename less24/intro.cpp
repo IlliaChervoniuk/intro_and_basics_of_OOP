@@ -26,8 +26,7 @@ void intro() {
 		<< frac5.to_string() << std::endl
 		<< frac6->to_string() << std::endl;
 
-	vector2 v1;
-	vector2 v2(3.5, 7.2, "A");
+	vector2<double> v1;	vector2 v2(3.5, 7.2, "A");
 	vector2 v3 = v2;
 	vector2 v4(2, 8, "B");
 	v3.setName("A_Copy");
