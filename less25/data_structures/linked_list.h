@@ -1,5 +1,9 @@
 #pragma once
 #include <iostream>
+#include <stdexcept>
+#include <format>
+
+
 
 template<typename T>
 struct ListNode {
@@ -61,6 +65,9 @@ void LinkedList<T>::insertBefore(T data, size_t index) {
 		}
 		else {
 			// помилка - index out of range
+			throw std::range_error(
+				std::format("LinkedList<T>::insertBefore: Max index {} but got {}", size - 1, index)
+				);
 		}
 	}
 }
@@ -127,8 +134,9 @@ T LinkedList<T>::remove(size_t index) {
 		}
 	}
 	else {
-		// error
-		return T(0);
+		throw std::range_error(
+				std::format("LinkedList<T>::remove: Unable to remove element. Max index {} but got {}", size - 1, index)
+				);
 	}
 }
 /*
@@ -194,7 +202,10 @@ try {
   throw std::range_error("index out of range")
 }
 catch(const std::range_error& ex) {
-  дії з оброблення виняткової ситуації з винятком std::range_error
+	дії з оброблення виняткової ситуації з винятком std::range_error
+	деталі винятку можна вилучити з ex.what() --> "index out of range" -
+	те, що передавалось при створенні винятку
+
 }
 catch(const std::runtime_error& ex) {
   блоків catch може бути декілька, під різні типи винятків
@@ -204,5 +215,20 @@ catch(const std::exception& ex) {
   всі винятки є нащадками std::exception, відповідно, даний
   блок буде приймати всі винятки, не спіймані вищими блоками.
 }
+
+Поради:
+– створювати винятки тільки для задач, коли неможлива подальша робота коду
+  (не використовувати для організації "далеких" переходів в нормальній роботі)
+- використовувати конкретні (типізовані) винятки, не вживати загальний
+- блоки try поділяти за логікою роботи: погано занадто обтяжувати блок, вміщуючи
+  в нього велику кількість коду, так і, навпаки, оточувати кожну інструкцію
+  власним блоком try-catch.
+
+- формувати детальні повідомлення про помилки, які дозволять
+  = знайти точку помилки
+  = дізнатись параметри, що призвели до помилки
+  = дізнатись детальну причину помилки
+поганий приклад повідомлення: parse error
+гарний приклад: Number parse error: unprocessable char '*' in position 2: '1*2'
 
 */
