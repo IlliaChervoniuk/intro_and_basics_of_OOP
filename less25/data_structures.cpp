@@ -1,7 +1,7 @@
 #include "data_structures.h"
 #include "data_structures/linked_list.h"
 #include <iostream>
-
+#include "Queue.h"
 template<typename T> // Шаблонними можуть бути функції та типи (класи, структу
 void print(T arg) {
     // Шаблон вводить "змінну" для типу, традиційно "Т"
@@ -32,6 +32,18 @@ struct fraction {
 };
 
 void data_structures() {
+    std::cout << "Queue demo" << std::endl;
+    Queue<int> queue;
+    queue.enqueue(1);
+    queue.enqueue(2);
+    queue.enqueue(3);
+    std::cout << queue.dequeue() << std::endl;
+    std::cout << queue.dequeue() << std::endl;
+    std::cout << queue.dequeue() << std::endl;
+
+}
+
+void data_structures2() {
     std::cout << "Data structures" << std::endl;
     LinkedList<int> *intList = new LinkedList<int>();
     intList->add(10);
@@ -42,16 +54,17 @@ void data_structures() {
     intList->print();
     intList->insertBefore(15, 2);
     intList->print();
-    std::cout << "removed: " << intList->remove(0) << std::endl;
+    std::cout << "removed: " << intList->remove(2) << std::endl;
     intList->print();
-    std::cout << "removed: " << intList->remove(3) << std::endl;
+    std::cout << "removed: " << intList->remove(2) << std::endl;
     intList->print();
-    std::cout << "removed: " << intList->remove(0) << std::endl;
-    intList->print();
-    std::cout << "removed: " << intList->remove(0) << std::endl;
+    std::cout << "removed: " << intList->remove(1) << std::endl;
     intList->print();
     std::cout << "removed: " << intList->remove(0) << std::endl;
     intList->print();
+    std::cout << "removed: " << intList->remove(0) << std::endl;
+    intList->print();
+
 }
 
 void data_structures_t() {

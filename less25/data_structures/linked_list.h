@@ -4,8 +4,8 @@
 template<typename T>
 struct ListNode {
     T data;
-    ListNode* prev;
-    ListNode* next;
+    ListNode* prev = NULL;
+    ListNode* next = NULL;
 };
 
 template<typename T>
@@ -69,45 +69,64 @@ template<typename T>
 void LinkedList<T>::print() {
     ListNode<T>* node = first;
     if (node == NULL) {
-        std::cout << "Empty list" << std::endl;
+        std::cout << "Empty list, size = " << size << std::endl;
     }
-    while (node) {
-        std::cout << node->data << " ";
-        node = node->next;
+    else {
+        std::cout << size << " element(s): ";
+        while (node) {
+            std::cout << node->data << " ";
+            node = node->next;
+        }
+        std::cout << std::endl;
+
     }
-    std::cout << std::endl;
+
 }
 
 template<typename T>
 T LinkedList<T>::remove(size_t index) {
     if (index < size) {
-        if (index == 0) {
-            ListNode<T>* node = first;
+        if (index == 0) {               //Delete first element
+            ListNode<T>* node = first;  // first
+            T data = node->data;        //   [p|0|n]<->[p|1|n]<->[p|2|n]
+            first = first->next;        // NULL         f               NULL
+            if (first) {                // first = first->next
+                first->prev = NULL;     //
+            }                           // first
+            delete node;                //  [p|0|n]
+            size -= 1;                  // NULL    NULL
+            if (size == 0) {            //
+                last = NULL;            // 100   200   300   400
+            }                           //  1     3     2      4
+            return data;                //
+        }                               // [NULL|1|300] [100|2|200] [300|3|400] [200|4|NULL]
+        if (index == size - 1) {       //Delete last element
+            ListNode<T>* node = last;
             T data = node->data;
-            first = first->next;
-            if (first) {
-                first->prev = NULL;
+            last = last->prev;
+            if (last) {
+                last->next = NULL;
             }
             delete node;
             size -= 1;
             if (size == 0) {
-                last = NULL;
+                first = NULL;
             }
             return data;
         }
-        if (index == size - 1) {
-            ListNode<T>* node = last;
-            T data = node->data;
-            last = last->prev;
-            last->next = NULL;
+        else {
+            // видалення з середини: ані перший, ані останній
+            ListNode<T>* node = first;
+            for (size_t i = 0; i < index; i++) {        // first                      last
+                node = node->next;                      //   [p|0|n]<->[p|1|n]<->[p|2|n]
+            }                                           // NULL                       NULL
+            node->prev->next = node->next;              // [p|0|n] <-------------->[p|2|n]
+            node->next->prev = node->prev;              // [NULL|1|300] [100|2|200] [300|3|400]
+            T data = node->data;                        // [NULL|1|200]             [100|3|400]
             delete node;
             size -= 1;
             return data;
         }
-        else {
-            return T(0);
-        }
-
     }
     else {
         //error
@@ -118,4 +137,40 @@ T LinkedList<T>::remove(size_t index) {
 /*
     node
 0<-[p|d|n]<->[p|d|n]->0
+
+[p|d|n] – struct (ListNode) – комплексний об'єкт, що складається з трьох полів:
+дані (d) та два покажчики (адреси) n (next) на наступний та p (prev) на попередній
+new ListNode – створює новий об'єкт, розміщує його у випадковому місці пам'яті та повертає адресу цього місця
+node – змінна, що зберігає адресу об'єкта
+first – окрема змінна (поле), що зберігає адресу першого об'єкта списку
+                    1
+                    |
+first(100)       node(200)
+[NULL|1|200]  [100|2|300]  [200|3|400]  [400|4|NULL]
+                       |      |
+                       2      3
+1: node – змінна, що зберігає адресу об'єкта
+2: node->next – поле next об'єкта за адресою node (200)
+ семантика: покажчик на наступний елемент (з адресою 300)
+3: node->next->prev – поле prev об'єкта за адресою node->next (300)
+ семантика: покажчик на поточний елемент (node)
+? чи еквівалентні тоді операції:
+node = ...
+node->next->prev = ...
+Ні:
+node = ... змінить вміст змінної node
+node->next->prev = ... змінить вміст поле prev об'єкта за адресою node->next
+
+? чи еквівалентні операції:
+node->data = 10
+node->next->prev->data = 10
+Так, обидві операції змінять поле data за об'єкта за адресою 200
+тільки перша операція одразу звернеться до адреси 200,
+а друга за кілька розіменувань
+
+? що зміниться після команди: node->next->data = 5
+! зміниться поле data об'єкта за адресою node->next (300) – у
+наступному (третьому) елементі
+
 */
+
