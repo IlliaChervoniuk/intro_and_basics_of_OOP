@@ -1,9 +1,7 @@
 #pragma once
+#include <format>
 #include <iostream>
 #include <stdexcept>
-#include <format>
-
-
 
 template<typename T>
 struct ListNode {
@@ -25,7 +23,86 @@ public:
 	size_t getSize() const { return size; }
 
 	void print();
+
+	LinkedList<T>* clone() const;
+
+	void clear() {
+		ListNode<T>* node = first;
+		while (node) {
+			first = first->next;
+			delete node;
+			node = first;
+		}
+		first = last = NULL;
+	}
+	/* Д.З. Реалізувати структуру даних Стек з дотриманням "правила шести" */
+	LinkedList() : first{ NULL }, last{ NULL }, size{ 0 } {
+		// Default constructor
+	}
+	LinkedList(const LinkedList<T>& other) {  // Copy constructor
+		ListNode<T>* node = other.first;
+		while (node) {
+			this->add(node->data);
+			node = node->next;
+		}
+	}
+	LinkedList(LinkedList<T>&& other) noexcept :   // Move constructor ('other' will be destroyed)
+		first{ other.first }, last{ other.last }, size{ other.size }
+	{
+		other.first = other.last = NULL;
+	}
+	LinkedList<T>& operator =(const LinkedList<T>& other) {
+		// видаляємо дані, якщо вони є
+		this->clear();
+		// копіюємо дані з іншого переліку
+		ListNode<T>* node = other.first;
+		while (node) {
+			this->add(node->data);
+			node = node->next;
+		}
+	}
+	LinkedList<T>& operator =(LinkedList<T>&& other) {
+		// видаляємо дані, якщо вони є
+		ListNode<T>* node = this->first;
+		while (node) {
+			first = first->next;
+			delete node;
+			node = first;
+		}
+		first = last = NULL;
+		// забираємо (переносимо) дані з іншого переліку
+		this->first = other.first;
+		this->last = other.last;
+		this->size = other.size;
+		// помічаємо інший перелік як порожній
+		other.first = other.last = NULL;
+	}
+	~LinkedList() {  // Destructor
+		while (first) {
+			last = first;
+			first = first->next;
+			delete last;
+		}
+	}
 };
+
+template<typename T>
+LinkedList<T>* LinkedList<T>::clone() const {
+	/*
+	Q1             node->next...
+	 *list1         |          |
+	   *first1 --> [p|d|n]<-->[p|d|n]...[ ] <-- last1
+	clone(res)        |          |       |
+	   *first2 --> [p|d|n]<-->[p|d|n]...[ ] <-- last2
+	*/
+	LinkedList<T>* res = new LinkedList<T>;
+	ListNode<T>* node = this->first;
+	while (node) {
+		res->add(node->data);
+		node = node->next;
+	}
+	return res;
+}
 
 // #include "linked_list.cpp"
 template<typename T>
@@ -66,8 +143,8 @@ void LinkedList<T>::insertBefore(T data, size_t index) {
 		else {
 			// помилка - index out of range
 			throw std::range_error(
-				std::format("LinkedList<T>::insertBefore: Max index {} but got {}", size - 1, index)
-				);
+				std::format("LinkedList<T>::insertBefore: Unable to insert element. Max list index {} but got {}", size - 1, index)
+			);
 		}
 	}
 }
@@ -134,9 +211,10 @@ T LinkedList<T>::remove(size_t index) {
 		}
 	}
 	else {
+		// error
 		throw std::range_error(
-				std::format("LinkedList<T>::remove: Unable to remove element. Max index {} but got {}", size - 1, index)
-				);
+			std::format("LinkedList<T>::remove: Unable to remove element. Max list index {} but got {}", size - 1, index)
+		);
 	}
 }
 /*
@@ -200,12 +278,11 @@ try {
   викликаються, трапляється оператор throw:
 
   throw std::range_error("index out of range")
-}
+}                              |
 catch(const std::range_error& ex) {
-	дії з оброблення виняткової ситуації з винятком std::range_error
-	деталі винятку можна вилучити з ex.what() --> "index out of range" -
-	те, що передавалось при створенні винятку
-
+  дії з оброблення виняткової ситуації з винятком std::range_error
+  деталі винятку можна вилучити з ex.what() --> "index out of range" -
+  те, що передавалось при створенні винятку
 }
 catch(const std::runtime_error& ex) {
   блоків catch може бути декілька, під різні типи винятків
@@ -217,18 +294,19 @@ catch(const std::exception& ex) {
 }
 
 Поради:
-– створювати винятки тільки для задач, коли неможлива подальша робота коду
-  (не використовувати для організації "далеких" переходів в нормальній роботі)
+- створювати винятки тільки для задач, коли неможлива подальша робота коду
+   (не використовувати для організації "далеких" переходів в нормальній роботі)
 - використовувати конкретні (типізовані) винятки, не вживати загальний
+   std::exception. Якщо немає потрібного, то краще створити свій (новий)
+   https://en.cppreference.com/cpp/error/exception
 - блоки try поділяти за логікою роботи: погано занадто обтяжувати блок, вміщуючи
-  в нього велику кількість коду, так і, навпаки, оточувати кожну інструкцію
-  власним блоком try-catch.
-
+   в нього велику кількість коду, так і, навпаки, оточувати кожну інструкцію
+   власним блоком try-catch. Наприклад, окремий блок для задач зчитування даних
+   та формування з них переліку. Окремий блок для роботи з переліком.
 - формувати детальні повідомлення про помилки, які дозволять
   = знайти точку помилки
   = дізнатись параметри, що призвели до помилки
   = дізнатись детальну причину помилки
-поганий приклад повідомлення: parse error
-гарний приклад: Number parse error: unprocessable char '*' in position 2: '1*2'
-
+  поганий приклад повідомлення: "parse error"
+  гарний приклад: "Number parse error: unprocessable char '*' in position 2: '1*2'"
 */
