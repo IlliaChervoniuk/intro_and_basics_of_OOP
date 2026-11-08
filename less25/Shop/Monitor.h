@@ -3,7 +3,7 @@
 
 class Monitor : public Electrical {
 private:
-    double diagonal;
+    double      diagonal;
 public:
     double      getDiagonal() const;
     Monitor*    setDiagonal(double);

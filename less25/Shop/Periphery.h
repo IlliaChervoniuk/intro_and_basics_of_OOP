@@ -6,6 +6,5 @@ private:
     std::string connection;
 public:
     std::string getConnection() const;
-    Periphery* setConnection(std::string);
-    virtual std::string toString() const = 0;
+    Periphery*  setConnection(std::string);
 };

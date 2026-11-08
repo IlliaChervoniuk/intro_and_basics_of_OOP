@@ -7,10 +7,10 @@ std::string Laptop::getHardware() const {
 
 Laptop* Laptop::setHardware(std::string hardware) {
     this->hardware = hardware;
-    return this;    // Fluent interface
+    return this;  // "fluent interface" - каскадне встановлення властивостей
 }
 
-std::string Laptop::toString() const  {
+std::string Laptop::toString() const {
     return std::format("{} {} hrn, {} ({} W)",
         getName(),
         getPrice(),
