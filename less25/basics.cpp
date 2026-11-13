@@ -2,7 +2,47 @@
 #include <memory>
 #include "basics.h"
 
+//
+
 void basics() {
+	std::cout << "OOP Basics" << std::endl;
+	// LinkedList<Product*> stock;
+	// + автоматично знищиться після завершення ф-ції basics()
+	// - весь об'єкт stock розміщується у стеку
+
+	// LinkedList<Product*>* stock;
+	// + економія стекової пам'яті, у стеку тільки адреса
+	// - необхідно створити об'єкт: stock = new LinkedList<Product*>();
+	// та не забути видалити (delete stock), оскільки автоматично звільниться
+	// тільки адреса, а не об'єкт за нею
+
+	// LinkedList<std::unique_ptr<Product>> stock;  // Перелік розумних покажчиків
+	// невдалий варіант - як збільшення пам'яті, так і непотрібні розумні покажчики
+
+	std::unique_ptr<LinkedList<Product *> > stock = // Розумний покажчик на перелік
+			std::make_unique<LinkedList<Product *> >();
+	// оптимальний варіант - покажчик в середині розумного покажчика та
+	// автоматичне видалення після роботи
+
+
+	stock->add((new Laptop())
+		->setHardware("Intel Core 5, RAM 16GB, SSD 512GB")
+		->setPower(90)
+		->setName("Acer Nitro")
+		->setPrice(60499)
+	);
+	stock->add((new Monitor())
+		->setDiagonal(32)
+		->setPower(120)
+		->setName("Dell Vision")
+		->setPrice(7950)
+
+	);
+	stock->print();
+
+}
+/*
+void basics2() {
 	std::cout << "OOP Basics" << std::endl;
 	// Поліморфізм - поєднання до єдиного масиву (колекції)
 	// об'єктів різного типу. Формально, об'єкти мають один
@@ -23,25 +63,23 @@ void basics() {
 		->setName("Dell Vision")
 		->setPrice(7950);
 
-	std::unique_ptr<Laptop> laptop = std::make_unique<Laptop>();
-
-	laptop->setHardware("Intel Core 5, RAM 16GB, SSD 512GB");
-	laptop->setPower(90);
-	laptop->setName("Acer Nitro");
-	laptop->setPrice(60499);
-
-	std::unique_ptr<Product> ptr = std::move(laptop);
+	std::unique_ptr<Product> ptr = std::make_unique<Laptop>(
+		(new Laptop())
+		->setHardware("Intel Core 5, RAM 16GB, SSD 512GB")
+		->setPower(90)
+		->setName("Acer Nitro")
+		->setPrice(60499)
+	);
 	// std::unique_ptr<Product> ptr2 = ptr; // помилка, не можна зробити другий покажчик на один об'єкт
 	std::unique_ptr<Product> ptr2 = std::move(ptr);  // перенести - можна
 
-	std::shared_ptr<Monitor> monitor = std::make_shared<Monitor>();
-
-	monitor->setDiagonal(32);
-	monitor->setPower(120);
-	monitor->setName("Dell Vision");
-	monitor->setPrice(7950);
-
-	std::shared_ptr<Product> s1 = monitor;
+	std::shared_ptr<Product> s1 = std::make_shared<Monitor>(
+		(new Monitor())
+		->setDiagonal(32)
+		->setPower(120)
+		->setName("Dell Vision")
+		->setPrice(7950)
+	);
 	std::shared_ptr<Product> s2 = s1;   // немає помилки
 
 	for (auto product : stock) {
@@ -49,7 +87,7 @@ void basics() {
 	}
 
 }
-
+*/
 /*
 Основні принципи ООП.
 Абстрагування, спадкування, поліморфізм, інкапсуляція.
