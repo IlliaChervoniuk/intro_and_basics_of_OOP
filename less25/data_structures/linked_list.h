@@ -84,6 +84,20 @@ public:
 			delete last;
 		}
 	}
+
+	T& operator[](size_t index) {
+		ListNode<T>* node = this->first;
+		while (node && index > 0) {
+			node= node->next;
+			index--;
+		}
+		if (node == NULL) {
+			throw std::range_error(
+				std::format("LinkedList<T>::insertBefore: Unable to insert element. Max list index {} but got {}", size - 1, index)
+			);
+		}
+		return node->data;
+	}
 };
 
 template<typename T>

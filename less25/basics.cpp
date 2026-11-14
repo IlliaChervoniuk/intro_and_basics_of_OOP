@@ -19,26 +19,32 @@ void basics() {
 	// LinkedList<std::unique_ptr<Product>> stock;  // Перелік розумних покажчиків
 	// невдалий варіант - як збільшення пам'яті, так і непотрібні розумні покажчики
 
-	std::unique_ptr<LinkedList<Product *> > stock = // Розумний покажчик на перелік
-			std::make_unique<LinkedList<Product *> >();
+	//std::unique_ptr<LinkedList<Product *> > stock = // Розумний покажчик на перелік
+	//		std::make_unique<LinkedList<Product *> >();
 	// оптимальний варіант - покажчик в середині розумного покажчика та
 	// автоматичне видалення після роботи
+	LinkedList<Product*> stock; //= new LinkedList<Product *>();
 
-
-	stock->add((new Laptop())
+	stock.add((new Laptop())
 		->setHardware("Intel Core 5, RAM 16GB, SSD 512GB")
 		->setPower(90)
 		->setName("Acer Nitro")
 		->setPrice(60499)
 	);
-	stock->add((new Monitor())
+
+	stock.add((new Monitor())
 		->setDiagonal(32)
 		->setPower(120)
 		->setName("Dell Vision")
 		->setPrice(7950)
 
 	);
-	stock->print();
+	int N = 2;
+	for (int i = 0; i < N; i++) {
+		std::cout << stock[i] << std::endl;
+	}
+
+
 
 }
 /*
